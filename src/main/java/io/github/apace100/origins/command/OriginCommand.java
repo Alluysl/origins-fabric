@@ -1,11 +1,9 @@
 package io.github.apace100.origins.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,14 +23,14 @@ public class OriginCommand {
 			literal("origin").requires(cs -> cs.hasPermissionLevel(2))
 				.then(literal("set")
 					.then(argument("targets", EntityArgumentType.players())
-					.then(argument("layer", LayerArgument.layer())
-					.then(argument("origin", OriginArgument.origin())
+					.then(argument("layer", LayerArgumentType.layer())
+					.then(argument("origin", OriginArgumentType.origin())
 					.executes((command) -> {
 						// Sets the origins of several people in the given layer.
 						int i = 0;
 						Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(command, "targets");
-						OriginLayer l = command.getArgument("layer", OriginLayer.class);
-						Origin o = command.getArgument("origin", Origin.class);
+						OriginLayer l = LayerArgumentType.getLayer(command, "layer");
+						Origin o = OriginArgumentType.getOrigin(command, "origin");
 						for(ServerPlayerEntity target : targets) {
 							setOrigin(target, l, o);
 							i++;
@@ -46,17 +44,16 @@ public class OriginCommand {
 					}))))
 				)
 				.then(literal("has")
-					.then(literal("origin")
 						.then(argument("targets", EntityArgumentType.players())
-						.then(argument("layer", LayerArgument.layer())
-						.then(argument("origin", OriginArgument.origin())
+						.then(argument("layer", LayerArgumentType.layer())
+						.then(argument("origin", OriginArgumentType.origin())
 						.executes((command) -> {
 							// Returns the number of people in the target selector with the origin in the given layer.
 							// Useful for checking if a player has the given origin in functions.
 							int i = 0;
 							Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(command, "targets");
-							OriginLayer l = command.getArgument("layer", OriginLayer.class);
-							Origin o = command.getArgument("origin", Origin.class);
+							OriginLayer l = LayerArgumentType.getLayer(command, "layer");
+							Origin o = OriginArgumentType.getOrigin(command, "origin");
 							for(ServerPlayerEntity target : targets) {
 								if (hasOrigin(target, l, o)) {
 									i++;
@@ -71,38 +68,13 @@ public class OriginCommand {
 							}
 							return i;
 						}))))
-					)
-					.then(literal("power")
-						.then(argument("targets", EntityArgumentType.players())
-						.then(argument("power", PowerArgument.power())
-						.executes((command) -> {
-							// Returns the number of people in the target selector with the given power.
-							// Useful for checking if a player has the given power in functions.
-							int i = 0;
-							Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(command, "targets");
-							PowerType<?> powerType = command.getArgument("power", PowerType.class);
-							for(ServerPlayerEntity target : targets) {
-								if (hasPower(target, powerType)) {
-									i++;
-								}
-							}
-							if (i == 0) {
-								command.getSource().sendError(new TranslatableText("commands.execute.conditional.fail"));
-							} else if (targets.size() == 1) {
-								command.getSource().sendFeedback(new TranslatableText("commands.execute.conditional.pass"), false);
-							} else {
-								command.getSource().sendFeedback(new TranslatableText("commands.execute.conditional.pass_count", i), false);
-							}
-							return i;
-						})))
-					)
 				)
 			.then(literal("get")
 				.then(argument("target", EntityArgumentType.player())
-					.then(argument("layer", LayerArgument.layer())
+					.then(argument("layer", LayerArgumentType.layer())
 						.executes((command) -> {
 							ServerPlayerEntity target = EntityArgumentType.getPlayer(command, "target");
-							OriginLayer layer = command.getArgument("layer", OriginLayer.class);
+							OriginLayer layer = LayerArgumentType.getLayer(command, "layer");
 							OriginComponent component = ModComponents.ORIGIN.get(target);
 							Origin origin = component.getOrigin(layer);
 							command.getSource().sendFeedback(new TranslatableText("commands.origin.get.result", target.getDisplayName(), new TranslatableText(layer.getTranslationKey()), origin.getName(), origin.getIdentifier()), false);
@@ -119,15 +91,11 @@ public class OriginCommand {
 		component.setOrigin(layer, origin);
 		OriginComponent.sync(player);
 		boolean hadOriginBefore = component.hadOriginBefore();
-		origin.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore));
+		OriginComponent.onChosen(player, hadOriginBefore);
 	}
 
 	private static boolean hasOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
 		OriginComponent component = ModComponents.ORIGIN.get(player);
 		return component.hasOrigin(layer) && component.getOrigin(layer).equals(origin);
-	}
-
-	private static boolean hasPower(PlayerEntity player, PowerType<?> powerType) {
-		return ModComponents.ORIGIN.get(player).hasPower(powerType);
 	}
 }
