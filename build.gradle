@@ -47,6 +47,9 @@ dependencies {
 	modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 	include "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 
+	modImplementation "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
+	include "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
+
 	modImplementation "com.github.adriantodt:FallFlyingLib:${project.ffl_version}"
 	include "com.github.adriantodt:FallFlyingLib:${project.ffl_version}"
 

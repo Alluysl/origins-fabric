@@ -7,6 +7,7 @@ import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModDamageSources;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.*;
+import io.github.ladysnake.pal.VanillaAbilities;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.*;
@@ -89,6 +90,11 @@ public class PowerFactories {
                 (type, player) ->
                     new CooldownPower(type, player, data.getInt("cooldown"), (HudRender)data.get("hud_render")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("creative_flight"),
+                new SerializableData(),
+                data ->
+                        (type, player) -> new PlayerAbilityPower(type, player, VanillaAbilities.ALLOW_FLYING))
+                .allowCondition());
         register(new PowerFactory<>(Origins.identifier("effect_immunity"),
             new SerializableData()
                 .add("effect", SerializableDataType.STATUS_EFFECT, null)
