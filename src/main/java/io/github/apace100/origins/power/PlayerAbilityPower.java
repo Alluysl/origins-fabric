@@ -30,7 +30,7 @@ public class PlayerAbilityPower extends Power {
     // Origins' onChosen is not as consistent as Apoli's onGained so hopefully tick does the job and I don't need to add onAdded/onRespawn callbacks
 
     @Override
-    public void onLost() {
+    public void onRemoved() {
         if(!player.world.isClient && hasAbility()) {
             revokeAbility();
         }
