@@ -3,15 +3,15 @@
   "id": "origins",
   "version": "${version}",
 
-  "name": "Origins",
-  "description": "This mod adds several origins with passive abilities to the game, which you can choose from at the beginning of the game.",
+  "name": "Origins (Alluysl's unofficial fork)",
+  "description": "This mod adds several origins with passive abilities to the game, which you can choose from at the beginning of the game. Apace is NOT responsible for this version of the mod.",
   "authors": [
     "Apace"
   ],
   "contact": {
     "homepage": "https://apace100.github.io/origins-fabric",
-    "sources": "https://github.com/apace100/origins-fabric",
-    "issues": "https://github.com/apace100/origins-fabric/issues"
+    "sources": "https://github.com/Alluysl/origins-fabric",
+    "issues": "https://github.com/Alluysl/origins-fabric/issues"
   },
 
   "license": "MIT",
