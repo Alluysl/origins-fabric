@@ -137,6 +137,8 @@ public class EntityConditions {
             .add("origin", SerializableDataType.IDENTIFIER)
             .add("layer", SerializableDataType.IDENTIFIER, null),
             (data, entity) -> {
+                if (!(entity instanceof PlayerEntity))
+                    return false;
                 OriginComponent component = ModComponents.ORIGIN.get(entity);
                 Identifier originId = data.getId("origin");
                 if(data.isPresent("layer")) {
@@ -158,6 +160,8 @@ public class EntityConditions {
         register(new ConditionFactory<>(Origins.identifier("power"), new SerializableData()
             .add("power", SerializableDataType.IDENTIFIER),
             (data, entity) -> {
+                if (!(entity instanceof PlayerEntity))
+                    return false;
                 try {
                     PowerType<?> powerType = PowerTypeRegistry.get(data.getId("power"));
                     return ModComponents.ORIGIN.get(entity).hasPower(powerType);
