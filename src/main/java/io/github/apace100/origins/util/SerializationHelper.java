@@ -18,6 +18,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -60,6 +61,7 @@ public class SerializationHelper {
         buf.writeInt(modifier.getOperation().getId());
     }
 
+    @SuppressWarnings("unused")
     public static void writeAttributeModifier(EntityAttributeModifier modifier, PacketByteBuf buf) {
         buf.writeString(modifier.getName());
         buf.writeDouble(modifier.getValue());
@@ -104,8 +106,8 @@ public class SerializationHelper {
         buf.writeBoolean(statusEffectInstance.shouldShowIcon());
     }
 
-    public static <T extends Enum<T>> HashMap<String, T> buildEnumMap(Class<T> enumClass, Function<T, String> enumToString) {
-        HashMap<String, T> map = new HashMap<>();
+    public static <T extends Enum<T>> Map<String, T> buildEnumMap(Class<T> enumClass, Function<T, String> enumToString) {
+        Map<String, T> map = new HashMap<>();
         for (T enumConstant : enumClass.getEnumConstants()) {
             map.put(enumToString.apply(enumConstant), enumConstant);
         }

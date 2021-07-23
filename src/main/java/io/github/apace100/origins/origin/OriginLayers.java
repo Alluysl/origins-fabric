@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class OriginLayers extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
-    private static HashMap<Identifier, OriginLayer> layers = new HashMap<>();
+    private static final Map<Identifier, OriginLayer> layers = new HashMap<>();
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 
@@ -31,7 +31,7 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
     @Override
     protected void apply(Map<Identifier, List<JsonElement>> loader, ResourceManager manager, Profiler profiler) {
         clear();
-        loader.forEach((id, jel) -> {
+        loader.forEach((id, jel) ->
             jel.forEach(je -> {
                 try {
                     Origins.LOGGER.info("Trying to read layer file: " + id);
@@ -52,8 +52,8 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
                 } catch (Exception e) {
                     Origins.LOGGER.error("There was a problem reading Origin layer file " + id.toString() + " (skipping): " + e.getMessage());
                 }
-            });
-        });
+            })
+        );
         Origins.LOGGER.info("Finished loading origin layers from data files. Read " + layers.size() + " layers.");
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(false);
     }

@@ -22,10 +22,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
 import net.minecraft.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ViewOriginScreen extends Screen {
 
@@ -45,7 +42,7 @@ public class ViewOriginScreen extends Screen {
 
 	public ViewOriginScreen() {
 		super(new TranslatableText(Origins.MODID + ".screen.view_origin"));
-		HashMap<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player).getOrigins();
+		Map<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player).getOrigins();
 		originLayers = new ArrayList<>(origins.size());
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		origins.forEach((layer, origin) -> {

@@ -60,10 +60,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Triple;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -568,7 +565,7 @@ public class SerializableDataType<T> {
         return enumValue(dataClass, null);
     }
 
-    public static <T extends Enum<T>> SerializableDataType<T> enumValue(Class<T> dataClass, HashMap<String, T> additionalMap) {
+    public static <T extends Enum<T>> SerializableDataType<T> enumValue(Class<T> dataClass, Map<String, T> additionalMap) {
         return new SerializableDataType<>(dataClass,
             (buf, t) -> buf.writeInt(t.ordinal()),
             (buf) -> dataClass.getEnumConstants()[buf.readInt()],
@@ -585,19 +582,16 @@ public class SerializableDataType<T> {
                     } else if(primitive.isString()) {
                         String enumName = primitive.getAsString();
                         try {
-                            T t = Enum.valueOf(dataClass, enumName);
-                            return t;
+                            return Enum.valueOf(dataClass, enumName);
                         } catch(IllegalArgumentException e0) {
                             try {
-                                T t = Enum.valueOf(dataClass, enumName.toUpperCase(Locale.ROOT));
-                                return t;
+                                return Enum.valueOf(dataClass, enumName.toUpperCase(Locale.ROOT));
                             } catch (IllegalArgumentException e1) {
                                 try {
                                     if(additionalMap == null || !additionalMap.containsKey(enumName)) {
                                         throw new IllegalArgumentException();
                                     }
-                                    T t = additionalMap.get(enumName);
-                                    return t;
+                                    return additionalMap.get(enumName);
                                 } catch (IllegalArgumentException e2) {
                                     T[] enumValues = dataClass.getEnumConstants();
                                     String stringOf = enumValues[0].name() + ", " + enumValues[0].name().toLowerCase(Locale.ROOT);
@@ -627,8 +621,7 @@ public class SerializableDataType<T> {
                             if(map == null || !map.containsKey(name)) {
                                 throw new IllegalArgumentException();
                             }
-                            T t = map.get(name);
-                            return t;
+                            return map.get(name);
                         } catch (IllegalArgumentException e2) {
                             throw new JsonSyntaxException("Expected value to be a string of: " + map.keySet().stream().reduce((s0, s1) -> s0 + ", " + s1));
                         }
@@ -662,7 +655,7 @@ public class SerializableDataType<T> {
             });
         }, (buf) -> {
             int count = buf.readInt();
-            FilterableWeightedList<T> list = new FilterableWeightedList<T>();
+            FilterableWeightedList<T> list = new FilterableWeightedList<>();
 
             for(int i = 0; i < count; ++i) {
                 T t = base.receive(buf);
@@ -672,7 +665,7 @@ public class SerializableDataType<T> {
 
             return list;
         }, (json) -> {
-            FilterableWeightedList<T> list = new FilterableWeightedList<T>();
+            FilterableWeightedList<T> list = new FilterableWeightedList<>();
             if (json.isJsonArray()) {
                 for (JsonElement je : json.getAsJsonArray()) {
                     JsonObject weightedObj = je.getAsJsonObject();

@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlayerOriginComponent implements OriginComponent {
 
     private PlayerEntity player;
-    private HashMap<OriginLayer, Origin> origins = new HashMap<>();
-    private ConcurrentHashMap<PowerType<?>, Power> powers = new ConcurrentHashMap<>();
+    private Map<OriginLayer, Origin> origins = new ConcurrentHashMap<>();
+    private Map<PowerType<?>, Power> powers = new ConcurrentHashMap<>();
 
     private boolean hadOriginBefore = false;
 
@@ -30,13 +30,14 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public boolean hasAllOrigins() {
-        return OriginLayers.getLayers().stream().allMatch(layer -> {
-            return !layer.isEnabled() || layer.getOrigins(player).size() == 0 || (origins.containsKey(layer) && origins.get(layer) != null && origins.get(layer) != Origin.EMPTY);
-        });
+        return OriginLayers.getLayers().stream().allMatch(layer ->
+            !layer.isEnabled() || layer.getOrigins(player).size() == 0 ||
+                    (origins.containsKey(layer) && origins.get(layer) != null && origins.get(layer) != Origin.EMPTY)
+        );
     }
 
     @Override
-    public HashMap<OriginLayer, Origin> getOrigins() {
+    public Map<OriginLayer, Origin> getOrigins() {
         return origins;
     }
 
@@ -68,6 +69,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Power> T getPower(PowerType<T> powerType) {
         if(powers.containsKey(powerType)) {
             return (T)powers.get(powerType);
@@ -77,9 +79,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public List<Power> getPowers() {
-        List<Power> list = new LinkedList<>();
-        list.addAll(powers.values());
-        return list;
+        return new LinkedList<>(powers.values());
     }
 
     private Set<PowerType<?>> getPowerTypes() {
@@ -98,6 +98,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Power> List<T> getPowers(Class<T> powerClass, boolean includeInactive) {
         List<T> list = new LinkedList<>();
         for(Power power : powers.values()) {

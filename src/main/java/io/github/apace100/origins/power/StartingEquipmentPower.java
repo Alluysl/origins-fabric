@@ -7,11 +7,12 @@ import net.minecraft.item.ItemStack;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class StartingEquipmentPower extends Power {
 
     private final List<ItemStack> itemStacks = new LinkedList<>();
-    private final HashMap<Integer, ItemStack> slottedStacks = new HashMap<>();
+    private final Map<Integer, ItemStack> slottedStacks = new HashMap<>();
     private boolean recurrent;
 
     public StartingEquipmentPower(PowerType<?> type, PlayerEntity player) {

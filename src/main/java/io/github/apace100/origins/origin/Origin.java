@@ -21,10 +21,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Origin {
@@ -54,25 +51,25 @@ public class Origin {
         return OriginRegistry.register(origin);
     }
 
-    public static HashMap<OriginLayer, Origin> get(Entity entity) {
+    public static Map<OriginLayer, Origin> get(Entity entity) {
         if(entity instanceof PlayerEntity) {
             return get((PlayerEntity)entity);
         }
         return new HashMap<>();
     }
 
-    public static HashMap<OriginLayer, Origin> get(PlayerEntity player) {
+    public static Map<OriginLayer, Origin> get(PlayerEntity player) {
         return ModComponents.ORIGIN.get(player).getOrigins();
     }
 
-    private Identifier identifier;
-    private List<PowerType<?>> powerTypes = new LinkedList<>();
+    private final Identifier identifier;
+    private final List<PowerType<?>> powerTypes = new LinkedList<>();
     private final ItemStack displayItem;
     private final Impact impact;
     private boolean isChoosable;
     private final int order;
     private final int loadingPriority;
-    private List<OriginUpgrade> upgrades = new LinkedList<>();
+    private final List<OriginUpgrade> upgrades = new LinkedList<>();
 
     private boolean isSpecial;
 
@@ -257,13 +254,12 @@ public class Origin {
 
     @Override
     public String toString() {
-        String str = "Origin(" + identifier.toString() + ")[";
+        StringBuilder str = new StringBuilder("Origin(" + identifier.toString() + ")[");
         for(PowerType<?> pt : powerTypes) {
-            str += PowerTypeRegistry.getId(pt);
-            str += ",";
+            str.append(PowerTypeRegistry.getId(pt));
+            str.append(",");
         }
-        str = str.substring(0, str.length() - 1) + "]";
-        return str;
+        return str.substring(0, str.length() - 1) + "]";
     }
 
     @Override

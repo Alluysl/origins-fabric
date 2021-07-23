@@ -39,6 +39,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -207,7 +208,7 @@ public class PowerFactories {
                                 p.addVelocity(0, data.getFloat("speed"), 0);
                                 p.velocityModified = true;
                                 if (soundEvent != null) {
-                                    p.world.playSound((PlayerEntity) null, p.getX(), p.getY(), p.getZ(), soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.4F / (p.getRandom().nextFloat() * 0.4F + 0.8F));
+                                    p.world.playSound(null, p.getX(), p.getY(), p.getZ(), soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.4F / (p.getRandom().nextFloat() * 0.4F + 0.8F));
                                 }
                                 for (int i = 0; i < 4; ++i) {
                                     ((ServerWorld) p.world).spawnParticles(ParticleTypes.CLOUD, p.getX(), p.getRandomBodyY(), p.getZ(), 8, p.getRandom().nextGaussian(), 0.0D, p.getRandom().nextGaussian(), 0.5);
@@ -414,7 +415,7 @@ public class PowerFactories {
                 .add("feet", SerializableDataType.ITEM_CONDITION, null),
             data ->
                 (type, player) -> {
-                    HashMap<EquipmentSlot, Predicate<ItemStack>> restrictions = new HashMap<>();
+                    Map<EquipmentSlot, Predicate<ItemStack>> restrictions = new HashMap<>();
                     if(data.isPresent("head")) {
                         restrictions.put(EquipmentSlot.HEAD, (ConditionFactory<ItemStack>.Instance)data.get("head"));
                     }
@@ -439,7 +440,7 @@ public class PowerFactories {
                 .add("tick_rate", SerializableDataType.INT, 80),
             data ->
                 (type, player) -> {
-                    HashMap<EquipmentSlot, Predicate<ItemStack>> restrictions = new HashMap<>();
+                    Map<EquipmentSlot, Predicate<ItemStack>> restrictions = new HashMap<>();
                     if(data.isPresent("head")) {
                         restrictions.put(EquipmentSlot.HEAD, (ConditionFactory<ItemStack>.Instance)data.get("head"));
                     }
@@ -842,10 +843,7 @@ public class PowerFactories {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("ignore_water"),
             new SerializableData(),
-            data ->
-                (type, player) -> {
-                    return new IgnoreWaterPower(type, player);
-                })
+            data -> IgnoreWaterPower::new)
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_projectile_damage"),
             new SerializableData()

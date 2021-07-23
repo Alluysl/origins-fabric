@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class OriginRegistry {
 
-    private static HashMap<Identifier, Origin> idToOrigin = new HashMap<>();
+    private static final Map<Identifier, Origin> idToOrigin = new HashMap<>();
 
     public static Origin register(Origin origin) {
         return register(origin.getIdentifier(), origin);
@@ -23,10 +23,8 @@ public class OriginRegistry {
     }
 
     protected static Origin update(Identifier id, Origin origin) {
-        if(idToOrigin.containsKey(id)) {
-            Origin old = idToOrigin.get(id);
-            idToOrigin.remove(id);
-        }
+        // Origin old = idToOrigin.get(id);
+        idToOrigin.remove(id);
         return register(id, origin);
     }
 

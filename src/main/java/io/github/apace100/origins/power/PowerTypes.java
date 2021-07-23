@@ -51,7 +51,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 
-    private final HashMap<Identifier, Integer> loadingPriorities = new HashMap<>();
+    private final Map<Identifier, Integer> loadingPriorities = new HashMap<>();
 
     public PowerTypes() {
         super(GSON, "powers");
@@ -61,7 +61,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
     protected void apply(Map<Identifier, List<JsonElement>> loader, ResourceManager manager, Profiler profiler) {
         PowerTypeRegistry.reset();
         loadingPriorities.clear();
-        loader.forEach((id, jel) -> {
+        loader.forEach((id, jel) ->
             jel.forEach(je -> {
                 try {
                     CURRENT_NAMESPACE = id.getNamespace();
@@ -79,13 +79,13 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                             ||  entry.getKey().equals("condition")) {
                                 continue;
                             }
-                            Identifier subId = new Identifier(id.toString() + "_" + entry.getKey());
+                            Identifier subId = new Identifier(id + "_" + entry.getKey());
                             try {
                                 readPower(subId, entry.getValue(), true);
                                 subPowers.add(subId);
                             } catch(Exception e) {
                                 Origins.LOGGER.error("There was a problem reading sub-power \"" +
-                                    subId.toString() + "\" in power file \"" + id.toString() + "\": " + e.getMessage());
+                                    subId + "\" in power file \"" + id + "\": " + e.getMessage());
                             }
                         }
                         MultiplePowerType superPower = (MultiplePowerType)readPower(id, je, false, MultiplePowerType::new);
@@ -96,8 +96,8 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                 } catch(Exception e) {
                     Origins.LOGGER.error("There was a problem reading power file " + id.toString() + " (skipping): " + e.getMessage());
                 }
-            });
-        });
+            })
+        );
         loadingPriorities.clear();
         CURRENT_NAMESPACE = null;
         CURRENT_PATH = null;
@@ -115,8 +115,8 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         if(MULTIPLE.equals(factoryId)) {
             factoryId = SIMPLE;
             if(isSubPower) {
-                throw new JsonSyntaxException("Power type \"" + MULTIPLE.toString() + "\" may not be used for a sub-power of "
-                    + "another \"" + MULTIPLE.toString() + "\" power.");
+                throw new JsonSyntaxException("Power type \"" + MULTIPLE + "\" may not be used for a sub-power of "
+                    + "another \"" + MULTIPLE + "\" power.");
             }
         }
         Optional<PowerFactory> optionalFactory = ModRegistries.POWER_FACTORY.getOrEmpty(factoryId);
@@ -150,6 +150,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         return new Identifier(Origins.MODID, "powers");
     }
 
+    @SuppressWarnings("unused")
     private static <T extends Power> PowerType<T> register(String path, PowerType<T> type) {
         return new PowerTypeReference<>(new Identifier(Origins.MODID, path));
         //return PowerTypeRegistry.register(new Identifier(Origins.MODID, path), type);

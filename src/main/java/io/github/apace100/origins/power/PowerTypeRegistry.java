@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class PowerTypeRegistry {
-    private static HashMap<Identifier, PowerType> idToPower = new HashMap<>();
+    private static final Map<Identifier, PowerType> idToPower = new HashMap<>();
 
     public static PowerType register(Identifier id, PowerType powerType) {
         if(idToPower.containsKey(id)) {
@@ -18,10 +18,8 @@ public class PowerTypeRegistry {
     }
 
     protected static PowerType update(Identifier id, PowerType powerType) {
-        if(idToPower.containsKey(id)) {
-            PowerType old = idToPower.get(id);
-            idToPower.remove(id);
-        }
+        // PowerType old = idToPower.get(id);
+        idToPower.remove(id);
         return register(id, powerType);
     }
 
@@ -29,6 +27,7 @@ public class PowerTypeRegistry {
         return idToPower.size();
     }
 
+    @SuppressWarnings("unused")
     public static Stream<Identifier> identifiers() {
         return idToPower.keySet().stream();
     }
@@ -45,8 +44,7 @@ public class PowerTypeRegistry {
         if(!idToPower.containsKey(id)) {
             throw new IllegalArgumentException("Could not get power type from id '" + id.toString() + "', as it was not registered!");
         }
-        PowerType powerType = idToPower.get(id);
-        return powerType;
+        return idToPower.get(id);
     }
 
     public static Identifier getId(PowerType<?> powerType) {

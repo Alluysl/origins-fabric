@@ -4,15 +4,15 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class ConditionedRestrictArmorPower extends Power {
 
-    private final HashMap<EquipmentSlot, Predicate<ItemStack>> armorConditions;
+    private final Map<EquipmentSlot, Predicate<ItemStack>> armorConditions;
     private final int tickRate;
 
-    public ConditionedRestrictArmorPower(PowerType<?> type, PlayerEntity player, HashMap<EquipmentSlot, Predicate<ItemStack>> armorConditions, int tickRate) {
+    public ConditionedRestrictArmorPower(PowerType<?> type, PlayerEntity player, Map<EquipmentSlot, Predicate<ItemStack>> armorConditions, int tickRate) {
         super(type, player);
         this.armorConditions = armorConditions;
         this.setTicking(true);

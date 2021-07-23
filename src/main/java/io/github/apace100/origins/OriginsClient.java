@@ -36,6 +36,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class OriginsClient implements ClientModInitializer {
 
@@ -47,8 +48,8 @@ public class OriginsClient implements ClientModInitializer {
 
     public static boolean isServerRunningOrigins = false;
 
-    private static HashMap<String, KeyBinding> idToKeyBindingMap = new HashMap<>();
-    private static HashMap<String, Boolean> lastKeyBindingStates = new HashMap<>();
+    private static Map<String, KeyBinding> idToKeyBindingMap = new HashMap<>();
+    private static Map<String, Boolean> lastKeyBindingStates = new HashMap<>();
     private static boolean initializedKeyBindingMap = false;
 
     public static void registerPowerKeybinding(String keyId, KeyBinding keyBinding) {
@@ -87,7 +88,7 @@ public class OriginsClient implements ClientModInitializer {
             if(tick.player != null) {
                 List<Power> powers = ModComponents.ORIGIN.get(tick.player).getPowers();
                 List<Power> pressedPowers = new LinkedList<>();
-                HashMap<String, Boolean> currentKeyBindingStates = new HashMap<>();
+                Map<String, Boolean> currentKeyBindingStates = new HashMap<>();
                 for(Power power : powers) {
                     if(power instanceof Active) {
                         Active active = (Active)power;

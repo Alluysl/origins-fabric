@@ -34,6 +34,7 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -126,7 +127,7 @@ public class ModPacketsS2C {
     @Environment(EnvType.CLIENT)
     private static void receivePowerList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         int powerCount = packetByteBuf.readInt();
-        HashMap<Identifier, PowerType> factories = new HashMap<>();
+        Map<Identifier, PowerType> factories = new HashMap<>();
         for(int i = 0; i < powerCount; i++) {
             Identifier powerId = packetByteBuf.readIdentifier();
             Identifier factoryId = packetByteBuf.readIdentifier();

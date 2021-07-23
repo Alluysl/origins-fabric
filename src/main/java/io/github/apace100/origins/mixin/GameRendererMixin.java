@@ -20,7 +20,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -49,9 +48,6 @@ public abstract class GameRendererMixin {
     @Shadow
     @Final
     private MinecraftClient client;
-
-    @Shadow
-    private ItemStack floatingItem;
 
     @Shadow protected abstract void method_31136(float f);
 
@@ -122,7 +118,7 @@ public abstract class GameRendererMixin {
         }
     }
 
-    private HashMap<BlockPos, BlockState> savedStates = new HashMap<>();
+    private final Map<BlockPos, BlockState> savedStates = new HashMap<>();
 
     // PHASING: remove_blocks
     @Inject(at = @At(value = "HEAD"), method = "render")

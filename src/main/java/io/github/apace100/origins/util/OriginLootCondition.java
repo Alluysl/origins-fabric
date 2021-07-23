@@ -16,7 +16,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.JsonSerializer;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,7 +34,7 @@ public class OriginLootCondition implements LootCondition {
         Optional<OriginComponent> optional = ModComponents.ORIGIN.maybeGet(lootContext.get(LootContextParameters.THIS_ENTITY));
         if(optional.isPresent()){
             OriginComponent component = optional.get();
-            HashMap<OriginLayer, Origin> map = component.getOrigins();
+            Map<OriginLayer, Origin> map = component.getOrigins();
             boolean matches = false;
             for (Map.Entry<OriginLayer, Origin> entry: map.entrySet()) {
                 if(entry.getValue().getIdentifier().equals(origin)) {
@@ -48,14 +47,13 @@ public class OriginLootCondition implements LootCondition {
         return false;
     }
 
+    @SuppressWarnings("unused")
     public static LootCondition.Builder builder(String originId) {
         return builder(new Identifier(originId));
     }
 
     public static LootCondition.Builder builder(Identifier origin) {
-        return () -> {
-            return new OriginLootCondition(origin);
-        };
+        return () -> new OriginLootCondition(origin);
     }
 
     public static class Serializer implements JsonSerializer<OriginLootCondition> {

@@ -9,11 +9,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 public class SerializableData {
 
-    private LinkedHashMap<String, Entry<?>> dataFields = new LinkedHashMap<>();
+    private final Map<String, Entry<?>> dataFields = new LinkedHashMap<>();
 
     public SerializableData add(String name, SerializableDataType<?> type) {
         dataFields.put(name, new Entry<>(type));
@@ -75,7 +76,7 @@ public class SerializableData {
     }
 
     public class Instance {
-        private HashMap<String, Object> data = new HashMap<>();
+        private final Map<String, Object> data = new HashMap<>();
 
         public Instance() {
 
@@ -136,14 +137,12 @@ public class SerializableData {
         public final T defaultValue;
         private final Function<Instance, T> defaultFunction;
         private final boolean hasDefault;
-        private final boolean hasDefaultFunction;
 
         public Entry(SerializableDataType<T> dataType) {
             this.dataType = dataType;
             this.defaultValue = null;
             this.defaultFunction = null;
             this.hasDefault = false;
-            this.hasDefaultFunction = false;
         }
 
         public Entry(SerializableDataType<T> dataType, T defaultValue) {
@@ -151,7 +150,6 @@ public class SerializableData {
             this.defaultValue = defaultValue;
             this.defaultFunction = null;
             this.hasDefault = true;
-            this.hasDefaultFunction = false;
         }
 
         public Entry(SerializableDataType<T> dataType, Function<Instance, T> defaultFunction) {
@@ -159,15 +157,12 @@ public class SerializableData {
             this.defaultValue = null;
             this.defaultFunction = defaultFunction;
             this.hasDefault = false;
-            this.hasDefaultFunction = true;
         }
 
-        public boolean hasDefault() {
-            return hasDefault || hasDefaultFunction;
-        }
+        public boolean hasDefault() { return hasDefault || defaultFunction != null; }
 
         public T getDefault(Instance dataInstance) {
-            if(hasDefaultFunction) {
+            if(defaultFunction != null) {
                 return defaultFunction.apply(dataInstance);
             } else if(hasDefault) {
                 return defaultValue;

@@ -27,7 +27,7 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 	boolean hasOrigin(OriginLayer layer);
 	boolean hasAllOrigins();
 
-	HashMap<OriginLayer, Origin> getOrigins();
+	Map<OriginLayer, Origin> getOrigins();
 	Origin getOrigin(OriginLayer layer);
 
 	boolean hadOriginBefore();

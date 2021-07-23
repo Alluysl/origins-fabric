@@ -4,13 +4,13 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class RestrictArmorPower extends Power {
-    private final HashMap<EquipmentSlot, Predicate<ItemStack>> armorConditions;
+    private final Map<EquipmentSlot, Predicate<ItemStack>> armorConditions;
 
-    public RestrictArmorPower(PowerType<?> type, PlayerEntity player, HashMap<EquipmentSlot, Predicate<ItemStack>> armorConditions) {
+    public RestrictArmorPower(PowerType<?> type, PlayerEntity player, Map<EquipmentSlot, Predicate<ItemStack>> armorConditions) {
         super(type, player);
         this.armorConditions = armorConditions;
     }
